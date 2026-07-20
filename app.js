@@ -12,11 +12,11 @@ const MESES = {
 };
 
 const MILESTONE_MSGS = [
-  [100, '🎉 ¡SE ARMÓ LA CUÁTICA! La vaca está completa, nos vemos en la despedida'],
-  [75, '🍾 ¡Hay pisco asegurado! Ya casi, dale que se puede'],
-  [50, '🥩 ¡Hay asado! Vamos a la mitad, no aflojen cabros'],
-  [25, '🏠 ¡Aseguramos la cabaña! Sigan transfiriendo, no sean lesos'],
-  [0, '🐣 Recién empezando… ya po cabros, transfieran, no sean patúos'],
+  [100, '🎉 ¡SE ARMÓ LA CAGÁ DE BUENA! La vaca está completa, nos vemos en la despedida'],
+  [75, '🍾 ¡Hay pisco asegurado, csm! Ya casi, dale que se puede'],
+  [50, '🥩 ¡Hay asado! Vamos a la mitad, no aflojen hueones'],
+  [25, '🏠 ¡Aseguramos la cabaña! Sigan transfiriendo, no sean cagados'],
+  [0, '🐣 Recién empezando… ya po cabros, transfieran, no sean hueones patúos'],
 ];
 
 const AVATAR_COLORS = ['#FF0A3C', '#FF2FA0', '#FFD700', '#39FF14', '#FF6B35', '#C41E3A', '#FF4D8D', '#B0083F'];
@@ -106,7 +106,7 @@ const STATUS_LABEL = {
   full: '💸 Full pagado',
   aldia: '✅ Al día',
   atrasado: '⚠️ Debe 1 cuota',
-  dicom: '🚨 Andái en Dicom',
+  dicom: '🚨 Andái cagado en Dicom',
 };
 
 /* ====== Render ====== */
@@ -136,8 +136,8 @@ function render(stats) {
   if (stats.currentMonthName) {
     const pendientes = stats.people.filter((p) => !p.pays.find((x) => x.month === stats.currentMonthName)?.paid);
     turnoEl.textContent = pendientes.length
-      ? `👉 Este mes andan cortos: ${pendientes.map((p) => p.name).join(', ')}`
-      : '✅ Este mes ya pagaron todos, qué milagro';
+      ? `👉 Este mes andan cagados: ${pendientes.map((p) => p.name).join(', ')}`
+      : '✅ Este mes ya pagaron todos, qué milagro csm';
   } else {
     turnoEl.textContent = '';
   }
@@ -187,7 +187,7 @@ function render(stats) {
           <div class="p-count">${p.paidCount} cuota${p.paidCount === 1 ? '' : 's'} · ${clp(p.paidCount * CUOTA)}</div>
         </div>`;
       }).join('')
-    : '<p class="panel-sub">Todavía nadie paga… qué fome, ándense moviendo 💀</p>';
+    : '<p class="panel-sub">Todavía nadie paga… qué hueá más fome, muévanse csm 💀</p>';
 
   // DICOM
   const morosos = sorted.filter((p) => p.debt > 0).sort((a, b) => b.debt - a.debt);
@@ -197,7 +197,7 @@ function render(stats) {
           <button class="funar-btn" data-name="${esc(p.name)}" data-debt="${p.debt}" data-amount="${p.debt * CUOTA}" title="Copiar la funada pa' mandarle">📤</button>
         </span>`
       ).join('')
-    : '<p class="dicom-empty">✨ ¡Nadie en DICOM! Todos al día, eri grandes cabros, se agradece ✨</p>';
+    : '<p class="dicom-empty">✨ ¡Nadie en DICOM! Todos al día, csm qué grandes cabros ✨</p>';
 }
 
 /* ====== Count-up ====== */
@@ -295,10 +295,10 @@ $('copy-btn').addEventListener('click', async () => {
     document.execCommand('copy');
     ta.remove();
   }
-  btn.textContent = '✅ ¡Copiado! Ahora no hay excusa';
+  btn.textContent = '✅ ¡Copiado! Ahora no hay excusa, csm';
   btn.classList.add('copied');
   setTimeout(() => {
-    btn.textContent = '📋 Copia la wea completa';
+    btn.textContent = '📋 Copia la hueá completa';
     btn.classList.remove('copied');
   }, 2500);
 });
@@ -316,7 +316,7 @@ $('dicom-list').addEventListener('click', async (e) => {
   const btn = e.target.closest('.funar-btn');
   if (!btn) return;
   const { name, debt, amount } = btn.dataset;
-  const msg = `Oye ${name}, te faltan ${debt} cuota${debt === '1' ? '' : 's'} (${clp(Number(amount))}) pa' la despedida, no te hagai el leso y transfiere 💸\n\n${BANK_TEXT}`;
+  const msg = `Oye ${name}, te faltan ${debt} cuota${debt === '1' ? '' : 's'} (${clp(Number(amount))}) pa' la despedida, no seai cagado y transfiere de una csm 💸\n\n${BANK_TEXT}`;
   try {
     await navigator.clipboard.writeText(msg);
   } catch {
@@ -337,7 +337,7 @@ function renderCountdown() {
   const el = $('countdown-msg');
   const diffMs = DESPEDIDA_TARGET - new Date();
   if (diffMs <= 0) {
-    el.textContent = '🎉 ¡Ya llegó noviembre, nos vemos pronto cabros!';
+    el.textContent = '🎉 ¡Ya llegó noviembre, la chucha, nos vemos pronto cabros!';
     return;
   }
   const days = Math.ceil(diffMs / 86400000);
