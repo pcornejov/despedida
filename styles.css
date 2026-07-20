@@ -1,0 +1,360 @@
+/* ============ Neón Vegas ============ */
+:root {
+  --bg: #0D0221;
+  --bg-panel: #16063a;
+  --bg-card: #1d0a4a;
+  --pink: #FF2E97;
+  --cyan: #00F0FF;
+  --gold: #FFD700;
+  --green: #39FF14;
+  --red: #FF3B3B;
+  --yellow: #FFC53B;
+  --text: #EAEAEA;
+  --muted: #9d8fc0;
+  --border: rgba(0, 240, 255, 0.25);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 46, 151, 0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0, 240, 255, 0.08), transparent);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+/* ============ Hero ============ */
+.hero { text-align: center; padding: 3rem 1rem 2rem; }
+
+.hero-badge {
+  display: inline-block;
+  font-family: 'Righteous', cursive;
+  font-size: 0.9rem;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.15);
+  margin-bottom: 1.2rem;
+}
+
+.neon-title {
+  font-family: 'Monoton', cursive;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 9vw, 5.5rem);
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px var(--pink),
+    0 0 42px var(--pink),
+    0 0 82px var(--pink),
+    0 0 92px var(--pink);
+}
+
+.hero-sub {
+  font-family: 'Righteous', cursive;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--muted);
+  margin-top: 0.8rem;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 55% { opacity: 0.3; text-shadow: none; }
+}
+.flicker { animation: flicker 4s infinite; }
+.flicker-slow { animation: flicker 7s infinite 1.5s; }
+
+/* ============ Panels ============ */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.6rem;
+  margin-top: 1.6rem;
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.07);
+}
+
+.panel h2 {
+  font-family: 'Righteous', cursive;
+  font-size: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.neon-cyan { color: var(--cyan); text-shadow: 0 0 10px rgba(0, 240, 255, 0.7); }
+.neon-pink { color: var(--pink); text-shadow: 0 0 10px rgba(255, 46, 151, 0.7); }
+.gold { color: var(--gold); }
+.panel-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+
+/* ============ Loading / error ============ */
+.loading-box, .error-box {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  font-family: 'Righteous', cursive;
+}
+.dice { font-size: 3rem; animation: spin 1.2s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============ Progreso global ============ */
+.big-money {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 1.4rem;
+}
+.big-money .gold {
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  font-weight: 800;
+  text-shadow: 0 0 14px rgba(255, 215, 0, 0.6);
+}
+.big-money .goal { color: var(--muted); font-size: 1.05rem; }
+
+.progress-track {
+  position: relative;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  margin: 2.4rem 0 0.8rem;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan), var(--pink));
+  box-shadow: 0 0 18px rgba(255, 46, 151, 0.7);
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.milestones { position: absolute; inset: 0; }
+.milestone {
+  position: absolute;
+  top: -1.9rem;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  text-align: center;
+  filter: grayscale(1) opacity(0.5);
+  transition: filter 0.6s;
+}
+.milestone::before { content: attr(data-emoji); display: block; }
+.milestone span { font-size: 0.65rem; color: var(--muted); }
+.milestone.unlocked { filter: none; }
+.milestone.unlocked::before { text-shadow: 0 0 12px var(--gold); }
+
+.groom {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -54%);
+  font-size: 1.6rem;
+  transition: left 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+.milestone-msg {
+  font-family: 'Righteous', cursive;
+  color: var(--gold);
+  min-height: 1.4em;
+  margin-bottom: 1.2rem;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.9rem;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+}
+.stat-label { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-value { font-size: 1.5rem; font-weight: 800; margin-top: 0.2rem; }
+.stat-value.cyan { color: var(--cyan); }
+.stat-value.green { color: var(--green); text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+.stat-value.pink { color: var(--pink); }
+
+/* ============ Tabla ============ */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+table { border-collapse: collapse; width: 100%; min-width: 640px; }
+
+th, td { padding: 0.6rem 0.5rem; text-align: center; white-space: nowrap; }
+
+thead th {
+  font-family: 'Righteous', cursive;
+  font-weight: 400;
+  color: var(--cyan);
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+thead th:first-child, tbody td:first-child { text-align: left; position: sticky; left: 0; background: var(--bg-panel); }
+
+tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+tbody tr:hover { background: rgba(0, 240, 255, 0.04); }
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #0D0221;
+  flex-shrink: 0;
+}
+.badge-tag { font-size: 0.68rem; font-weight: 600; color: var(--muted); display: block; }
+
+.chip { font-size: 1rem; }
+.chip.paid { color: var(--green); text-shadow: 0 0 8px rgba(57, 255, 20, 0.7); }
+.chip.unpaid { color: rgba(255, 255, 255, 0.18); }
+
+.mini-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-width: 110px;
+}
+.mini-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.mini-fill { height: 100%; border-radius: 999px; }
+.mini-label { font-size: 0.72rem; color: var(--muted); }
+
+.status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  white-space: nowrap;
+}
+.status-full   { background: rgba(255, 215, 0, 0.15);  color: var(--gold);   border: 1px solid var(--gold); }
+.status-aldia  { background: rgba(57, 255, 20, 0.12);  color: var(--green);  border: 1px solid rgba(57, 255, 20, 0.5); }
+.status-atrasado { background: rgba(255, 197, 59, 0.12); color: var(--yellow); border: 1px solid rgba(255, 197, 59, 0.5); }
+.status-dicom  { background: rgba(255, 59, 59, 0.12);  color: var(--red);    border: 1px solid rgba(255, 59, 59, 0.5); }
+
+/* ============ Podio / DICOM ============ */
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin: 1.4rem 0 2rem;
+}
+.podium-spot {
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 0.8rem 0.8rem;
+  width: min(30%, 160px);
+}
+.podium-spot .medal { font-size: 2rem; }
+.podium-spot .p-name { font-family: 'Righteous', cursive; margin-top: 0.3rem; }
+.podium-spot .p-count { color: var(--muted); font-size: 0.8rem; }
+.podium-spot.first {
+  padding-top: 1.6rem;
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+}
+.podium-spot.first .p-name { color: var(--gold); }
+
+.dicom-title {
+  font-family: 'Righteous', cursive;
+  color: var(--red);
+  text-shadow: 0 0 10px rgba(255, 59, 59, 0.6);
+  margin-top: 1rem;
+}
+.dicom-list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.dicom-chip {
+  background: rgba(255, 59, 59, 0.1);
+  border: 1px dashed rgba(255, 59, 59, 0.5);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.88rem;
+}
+.dicom-chip .debt { color: var(--red); font-weight: 700; }
+.dicom-empty { color: var(--green); font-family: 'Righteous', cursive; }
+
+/* ============ Datos bancarios ============ */
+.panel-bank { border-color: rgba(255, 46, 151, 0.4); box-shadow: 0 0 24px rgba(255, 46, 151, 0.12); }
+
+.bank-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 46, 151, 0.35);
+  border-radius: 14px;
+  padding: 1.2rem;
+  margin-top: 1rem;
+}
+.bank-data { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem 1.4rem; }
+.bank-data dt { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.bank-data dd { font-weight: 700; font-size: 1.02rem; margin-top: 0.15rem; overflow-wrap: anywhere; }
+
+.btn-neon {
+  margin-top: 1.2rem;
+  font-family: 'Righteous', cursive;
+  font-size: 1rem;
+  color: var(--cyan);
+  background: transparent;
+  border: 1.5px solid var(--cyan);
+  border-radius: 999px;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.35), inset 0 0 10px rgba(0, 240, 255, 0.1);
+  transition: all 0.2s;
+}
+.btn-neon:hover { background: rgba(0, 240, 255, 0.12); box-shadow: 0 0 22px rgba(0, 240, 255, 0.6); }
+.btn-neon.copied { color: var(--green); border-color: var(--green); box-shadow: 0 0 18px rgba(57, 255, 20, 0.5); }
+
+/* ============ Footer ============ */
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding: 2rem 1rem 2.6rem;
+}
+footer a { color: var(--cyan); }
+
+/* ============ Mobile ============ */
+@media (max-width: 560px) {
+  .panel { padding: 1.1rem; }
+  .podium { flex-wrap: wrap; }
+  .podium-spot { width: 45%; }
+}

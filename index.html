@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Despedida 🎰 ¿Quién ha pagado?</title>
+  <meta name="description" content="El fondo de la despedida de soltero: quién ha pagado, quién está en DICOM y los datos pa' transferir.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎰</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Righteous&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <header class="hero">
+    <div class="hero-badge">🎩 Fondo despedida de soltero 🎩</div>
+    <h1 class="neon-title"><span class="flicker-slow">LA</span> DESPE<span class="flicker">DI</span>DA</h1>
+    <p class="hero-sub">Porque se nos casa el weón 💔🎉</p>
+  </header>
+
+  <main>
+    <!-- Estado de carga / error -->
+    <div id="loading" class="loading-box">
+      <div class="dice">🎲</div>
+      <p>Cargando la plata desde el Sheet…</p>
+    </div>
+    <div id="error" class="error-box" hidden>
+      <p>😵 Se cayó la conexión con el Sheet, compadre.</p>
+      <button id="retry-btn" class="btn-neon">Intentar de nuevo 🔄</button>
+    </div>
+
+    <div id="app" hidden>
+      <!-- Progreso global -->
+      <section class="panel panel-progress">
+        <h2 class="neon-cyan">💰 La Vaca</h2>
+        <div class="big-money">
+          <span id="total-amount" class="gold">$0</span>
+          <span class="goal">de <span id="goal-amount"></span></span>
+        </div>
+        <div class="progress-track" aria-label="Progreso total de la recaudación">
+          <div id="global-bar" class="progress-fill"></div>
+          <div class="milestones">
+            <div class="milestone" style="left:25%" data-emoji="🏠"><span>25%</span></div>
+            <div class="milestone" style="left:50%" data-emoji="🥩"><span>50%</span></div>
+            <div class="milestone" style="left:75%" data-emoji="🍾"><span>75%</span></div>
+            <div class="milestone" style="left:100%" data-emoji="🎉"><span>100%</span></div>
+          </div>
+          <div id="groom" class="groom">🤵</div>
+        </div>
+        <p id="milestone-msg" class="milestone-msg"></p>
+        <div class="stat-cards">
+          <div class="stat-card">
+            <div class="stat-label">Cuotas pagadas</div>
+            <div id="stat-cuotas" class="stat-value cyan">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Al día este mes</div>
+            <div id="stat-aldia" class="stat-value green">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Va liderando</div>
+            <div id="stat-lider" class="stat-value pink">–</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabla de cuotas -->
+      <section class="panel">
+        <h2 class="neon-cyan">🧾 ¿Quién ha pagado?</h2>
+        <p class="panel-sub">Cuota de <strong class="gold" id="cuota-label">$30.000</strong> mensual · te estamos sapeando 👀</p>
+        <div class="table-wrap">
+          <table id="pay-table">
+            <thead><tr id="table-head"></tr></thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Ranking -->
+      <section class="panel">
+        <h2 class="neon-cyan">🏆 Los Cumplidores</h2>
+        <div id="podium" class="podium"></div>
+        <h3 class="dicom-title">🚨 DICOM de la Despedida 🚨</h3>
+        <p class="panel-sub">El que no paga no chupa 🍺❌</p>
+        <div id="dicom-list" class="dicom-list"></div>
+      </section>
+
+      <!-- Datos bancarios -->
+      <section class="panel panel-bank" id="transferir">
+        <h2 class="neon-pink">💸 Aquí no hay excusas: datos pa' transferir 👇</h2>
+        <div class="bank-card">
+          <dl class="bank-data">
+            <div><dt>Titular</dt><dd>Pablo Patricio Cornejo Villarroel</dd></div>
+            <div><dt>RUT</dt><dd>16.611.650-3</dd></div>
+            <div><dt>Banco</dt><dd>Mercado Pago</dd></div>
+            <div><dt>Tipo de cuenta</dt><dd>Cuenta Vista</dd></div>
+            <div><dt>N° de cuenta</dt><dd>1042672758</dd></div>
+            <div><dt>Correo</dt><dd>pablo.cornejo.v@gmail.com</dd></div>
+            <div><dt>Monto</dt><dd class="gold">$30.000 al mes</dd></div>
+          </dl>
+          <button id="copy-btn" class="btn-neon">📋 Copiar todos los datos</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>Nadie se casa sobrio en esta familia 🍾 · datos en vivo desde <a href="https://docs.google.com/spreadsheets/d/1QsCMokPw_Kpv9nr3WQBInBhid-O3YT-yo61S1rlbFpw/edit" target="_blank" rel="noopener">Google Sheets</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
