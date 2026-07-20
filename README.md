@@ -1,7 +1,7 @@
 # 🎰 La Despedida — ¿Quién ha pagado?
 
 Web estática que muestra el progreso de las cuotas del fondo de la despedida de soltero,
-con datos en vivo desde [Google Sheets](https://docs.google.com/spreadsheets/d/1QsCMokPw_Kpv9nr3WQBInBhid-O3YT-yo61S1rlbFpw/edit).
+con datos en vivo desde una planilla de Google Sheets administrada por la organización.
 
 ## Cómo funciona
 
