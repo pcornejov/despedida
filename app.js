@@ -16,7 +16,7 @@ const MILESTONE_MSGS = [
   [0, '🐣 Recién empezando… ya po cabros, transfieran, no sean patúos'],
 ];
 
-const AVATAR_COLORS = ['#FF2E97', '#00F0FF', '#FFD700', '#39FF14', '#FF8C42', '#B388FF', '#4DD0E1', '#F06292'];
+const AVATAR_COLORS = ['#FF0A3C', '#FF2FA0', '#FFD700', '#39FF14', '#FF6B35', '#C41E3A', '#FF4D8D', '#B0083F'];
 
 const $ = (id) => document.getElementById(id);
 const clp = (n) => '$' + n.toLocaleString('es-CL');
@@ -189,7 +189,7 @@ function fireConfetti() {
   const ctx = canvas.getContext('2d');
   canvas.width = innerWidth;
   canvas.height = innerHeight;
-  const colors = ['#FF2E97', '#00F0FF', '#FFD700', '#39FF14', '#ffffff'];
+  const colors = ['#FF0A3C', '#FF2FA0', '#FFD700', '#39FF14', '#ffffff'];
   const parts = Array.from({ length: 180 }, () => ({
     x: Math.random() * canvas.width,
     y: -20 - Math.random() * canvas.height * 0.5,
