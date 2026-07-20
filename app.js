@@ -12,10 +12,10 @@ const MESES = {
 };
 
 const MILESTONE_MSGS = [
-  [100, '🎉 ¡SE ARMÓ! La vaca está completa, nos vemos en la despedida'],
-  [75, '🍾 ¡Hay pisco asegurado! Falta el último empujón'],
-  [50, '🥩 ¡Hay asado! Vamos por la mitad, no aflojen'],
-  [25, '🏠 ¡Aseguramos la cabaña! Sigan transfiriendo'],
+  [100, '🎉 ¡SE ARMÓ LA CUÁTICA! La vaca está completa, nos vemos en la despedida'],
+  [75, '🍾 ¡Hay pisco asegurado! Ya casi, dale que se puede'],
+  [50, '🥩 ¡Hay asado! Vamos a la mitad, no aflojen cabros'],
+  [25, '🏠 ¡Aseguramos la cabaña! Sigan transfiriendo, no sean lesos'],
   [0, '🐣 Recién empezando… ya po cabros, transfieran, no sean patúos'],
 ];
 
@@ -95,9 +95,9 @@ function buildStats(rows) {
 
 function badgeFor(p, stats) {
   if (p.paidCount === stats.months.length && stats.months.length > 0) return '💸 Full pagado';
-  if (p.streak >= 3) return `🔥 Racha de ${p.streak} meses`;
+  if (p.streak >= 3) return `🔥 Racha de ${p.streak} meses, qué crack`;
   if (p.paidCount === stats.maxPaid && stats.maxPaid > 0) return '🥇 El seco';
-  if (p.paidCount === 0) return '👻 El perdido';
+  if (p.paidCount === 0) return '👻 Se hizo humo';
   if (p.status === 'dicom') return '🧾 En DICOM';
   return '';
 }
@@ -106,7 +106,7 @@ const STATUS_LABEL = {
   full: '💸 Full pagado',
   aldia: '✅ Al día',
   atrasado: '⚠️ Debe 1 cuota',
-  dicom: '🚨 Moroso',
+  dicom: '🚨 Andái en Dicom',
 };
 
 /* ====== Render ====== */
@@ -136,7 +136,7 @@ function render(stats) {
   if (stats.currentMonthName) {
     const pendientes = stats.people.filter((p) => !p.pays.find((x) => x.month === stats.currentMonthName)?.paid);
     turnoEl.textContent = pendientes.length
-      ? `👉 Este mes falta: ${pendientes.map((p) => p.name).join(', ')}`
+      ? `👉 Este mes andan cortos: ${pendientes.map((p) => p.name).join(', ')}`
       : '✅ Este mes ya pagaron todos, qué milagro';
   } else {
     turnoEl.textContent = '';
@@ -187,17 +187,17 @@ function render(stats) {
           <div class="p-count">${p.paidCount} cuota${p.paidCount === 1 ? '' : 's'} · ${clp(p.paidCount * CUOTA)}</div>
         </div>`;
       }).join('')
-    : '<p class="panel-sub">Todavía nadie paga… qué vergüenza 💀</p>';
+    : '<p class="panel-sub">Todavía nadie paga… qué fome, ándense moviendo 💀</p>';
 
   // DICOM
   const morosos = sorted.filter((p) => p.debt > 0).sort((a, b) => b.debt - a.debt);
   $('dicom-list').innerHTML = morosos.length
     ? morosos.map((p) =>
         `<span class="dicom-chip">${p.paidCount === 0 ? '👻' : '🐢'} ${esc(p.name)} · debe <span class="debt">${p.debt} cuota${p.debt === 1 ? '' : 's'} (${clp(p.debt * CUOTA)})</span>
-          <button class="funar-btn" data-name="${esc(p.name)}" data-debt="${p.debt}" data-amount="${p.debt * CUOTA}" title="Copiar mensaje para funarlo">📤</button>
+          <button class="funar-btn" data-name="${esc(p.name)}" data-debt="${p.debt}" data-amount="${p.debt * CUOTA}" title="Copiar la funada pa' mandarle">📤</button>
         </span>`
       ).join('')
-    : '<p class="dicom-empty">✨ ¡Nadie en DICOM! Todos al día, eri grandes cabros ✨</p>';
+    : '<p class="dicom-empty">✨ ¡Nadie en DICOM! Todos al día, eri grandes cabros, se agradece ✨</p>';
 }
 
 /* ====== Count-up ====== */
@@ -298,7 +298,7 @@ $('copy-btn').addEventListener('click', async () => {
   btn.textContent = '✅ ¡Copiado! Ahora no hay excusa';
   btn.classList.add('copied');
   setTimeout(() => {
-    btn.textContent = '📋 Copiar todos los datos';
+    btn.textContent = '📋 Copia la wea completa';
     btn.classList.remove('copied');
   }, 2500);
 });
@@ -316,7 +316,7 @@ $('dicom-list').addEventListener('click', async (e) => {
   const btn = e.target.closest('.funar-btn');
   if (!btn) return;
   const { name, debt, amount } = btn.dataset;
-  const msg = `Oye ${name}, te faltan ${debt} cuota${debt === '1' ? '' : 's'} (${clp(Number(amount))}) pa' la despedida, no seai patúo 💸\n\n${BANK_TEXT}`;
+  const msg = `Oye ${name}, te faltan ${debt} cuota${debt === '1' ? '' : 's'} (${clp(Number(amount))}) pa' la despedida, no te hagai el leso y transfiere 💸\n\n${BANK_TEXT}`;
   try {
     await navigator.clipboard.writeText(msg);
   } catch {
@@ -337,11 +337,11 @@ function renderCountdown() {
   const el = $('countdown-msg');
   const diffMs = DESPEDIDA_TARGET - new Date();
   if (diffMs <= 0) {
-    el.textContent = '🎉 ¡Ya llegó noviembre, nos vemos pronto!';
+    el.textContent = '🎉 ¡Ya llegó noviembre, nos vemos pronto cabros!';
     return;
   }
   const days = Math.ceil(diffMs / 86400000);
-  el.textContent = `📅 Faltan ~${days} días para noviembre · día exacto por confirmar`;
+  el.textContent = `📅 Faltan ~${days} días pa' noviembre · día exacto por confirmar`;
 }
 
 /* ====== Última actualización ====== */
