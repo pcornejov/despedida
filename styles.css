@@ -17,10 +17,15 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 10, 60, 0.28), transparent),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(255, 47, 160, 0.12), transparent);
+    linear-gradient(180deg, rgba(10, 3, 4, 0.1) 0%, rgba(10, 3, 4, 0.65) 55%, var(--bg) 85%),
+    radial-gradient(ellipse 90% 70% at 50% 15%, rgba(255, 10, 60, 0.25), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(255, 47, 160, 0.12), transparent),
+    url('assets/hero-bg.jpg');
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100vw auto;
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
@@ -47,14 +52,6 @@ main {
   text-align: center;
   padding: 3rem 1rem 2rem;
   overflow: hidden;
-  background-image:
-    linear-gradient(180deg, rgba(10, 3, 4, 0.15) 0%, rgba(10, 3, 4, 0.35) 60%, var(--bg) 100%),
-    radial-gradient(ellipse 90% 70% at 50% 30%, rgba(255, 10, 60, 0.25), transparent),
-    url('assets/hero-bg.jpg');
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  min-height: 520px;
 }
 
 /* ------ Caños con foco ------ */
@@ -504,6 +501,26 @@ td.col-current, th.col-current {
 @media (min-width: 640px) {
   .carousel-slide { flex-basis: calc(50% - 0.5rem); }
 }
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+.social-btn {
+  font-family: 'Righteous', cursive;
+  font-size: 0.95rem;
+  color: var(--text);
+  text-decoration: none;
+  border: 1.5px solid var(--cyan);
+  border-radius: 999px;
+  padding: 0.55rem 1.3rem;
+  box-shadow: 0 0 10px rgba(255, 47, 160, 0.35), inset 0 0 8px rgba(255, 47, 160, 0.1);
+  transition: all 0.2s;
+}
+.social-btn:hover { background: rgba(255, 47, 160, 0.15); box-shadow: 0 0 20px rgba(255, 47, 160, 0.6); }
 
 /* ============ Datos bancarios ============ */
 .panel-bank { border-color: rgba(255, 46, 151, 0.4); box-shadow: 0 0 24px rgba(255, 46, 151, 0.12); }
