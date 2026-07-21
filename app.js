@@ -413,3 +413,40 @@ load();
 setInterval(() => load(true), REFRESH_MS);
 setInterval(renderUpdatedAt, 15000);
 setInterval(renderCountdown, 3600000);
+
+/* ====== Carrusel galería ====== */
+(function initCarousel() {
+  const track = $('carousel-track');
+  const dotsEl = $('carousel-dots');
+  if (!track || !dotsEl) return;
+  const slides = [...track.children];
+  dotsEl.innerHTML = slides.map((_, i) => `<button class="carousel-dot${i === 0 ? ' active' : ''}" aria-label="Ir a foto ${i + 1}"></button>`).join('');
+  const dots = [...dotsEl.children];
+
+  const scrollToSlide = (i) => {
+    const clamped = Math.max(0, Math.min(i, slides.length - 1));
+    track.scrollTo({ left: slides[clamped].offsetLeft, behavior: 'smooth' });
+  };
+
+  document.querySelector('.carousel-prev').addEventListener('click', () => {
+    scrollToSlide(dots.findIndex((d) => d.classList.contains('active')) - 1);
+  });
+  document.querySelector('.carousel-next').addEventListener('click', () => {
+    scrollToSlide(dots.findIndex((d) => d.classList.contains('active')) + 1);
+  });
+  dots.forEach((d, i) => d.addEventListener('click', () => scrollToSlide(i)));
+
+  let ticking = false;
+  track.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const idx = slides.reduce((closest, s, i) => {
+        const dist = Math.abs(s.offsetLeft - track.scrollLeft);
+        return dist < closest.dist ? { i, dist } : closest;
+      }, { i: 0, dist: Infinity }).i;
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      ticking = false;
+    });
+  });
+})();

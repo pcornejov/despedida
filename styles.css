@@ -52,9 +52,9 @@ main {
     radial-gradient(ellipse 90% 70% at 50% 30%, rgba(255, 10, 60, 0.25), transparent),
     url('assets/hero-bg.jpg');
   background-size: cover;
-  background-position: center 25%;
+  background-position: center top;
   background-repeat: no-repeat;
-  min-height: 420px;
+  min-height: 520px;
 }
 
 /* ------ Caños con foco ------ */
@@ -433,6 +433,77 @@ td.col-current, th.col-current {
   transition: all 0.2s;
 }
 .funar-btn:hover { background: rgba(255, 59, 59, 0.18); box-shadow: 0 0 8px rgba(255, 59, 59, 0.5); }
+
+/* ============ Galería ============ */
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  border-radius: 14px;
+  scrollbar-width: none;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 20px rgba(255, 10, 60, 0.2);
+  aspect-ratio: 4 / 3;
+}
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-arrow {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pink);
+  background: rgba(255, 10, 60, 0.1);
+  color: var(--text);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 10, 60, 0.35);
+  transition: all 0.2s;
+}
+.carousel-arrow:hover { background: rgba(255, 10, 60, 0.25); box-shadow: 0 0 18px rgba(255, 10, 60, 0.6); }
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+}
+.carousel-dot.active { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
+
+@media (min-width: 640px) {
+  .carousel-slide { flex-basis: calc(50% - 0.5rem); }
+}
 
 /* ============ Datos bancarios ============ */
 .panel-bank { border-color: rgba(255, 46, 151, 0.4); box-shadow: 0 0 24px rgba(255, 46, 151, 0.12); }
