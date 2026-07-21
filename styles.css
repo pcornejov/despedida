@@ -48,12 +48,13 @@ main {
   padding: 3rem 1rem 2rem;
   overflow: hidden;
   background-image:
-    linear-gradient(180deg, rgba(10, 3, 4, 0.55) 0%, rgba(10, 3, 4, 0.75) 55%, var(--bg) 100%),
-    radial-gradient(ellipse 90% 70% at 50% 30%, rgba(255, 10, 60, 0.35), transparent),
+    linear-gradient(180deg, rgba(10, 3, 4, 0.15) 0%, rgba(10, 3, 4, 0.35) 60%, var(--bg) 100%),
+    radial-gradient(ellipse 90% 70% at 50% 30%, rgba(255, 10, 60, 0.25), transparent),
     url('assets/hero-bg.jpg');
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 25%;
   background-repeat: no-repeat;
+  min-height: 420px;
 }
 
 /* ------ Caños con foco ------ */
