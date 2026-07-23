@@ -1,0 +1,15 @@
+{
+  "name": "La Despedida — ¿Quién ha pagado?",
+  "short_name": "La Despedida",
+  "description": "Fondo de la despedida de soltero: quién ha pagado, quién anda en DICOM y los datos pa' transferir.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0a0304",
+  "theme_color": "#0a0304",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

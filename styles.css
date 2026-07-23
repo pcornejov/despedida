@@ -140,6 +140,9 @@ main {
   font-size: clamp(2.4rem, 9vw, 5.5rem);
   color: #fff;
   letter-spacing: 0.08em;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s;
   text-shadow:
     0 0 7px #fff,
     0 0 10px #fff,
@@ -148,6 +151,7 @@ main {
     0 0 82px var(--pink),
     0 0 92px var(--pink);
 }
+.neon-title:active { transform: scale(0.97); }
 
 .hero-sub {
   font-family: 'Righteous', cursive;
@@ -430,6 +434,89 @@ td.col-current, th.col-current {
   transition: all 0.2s;
 }
 .funar-btn:hover { background: rgba(255, 59, 59, 0.18); box-shadow: 0 0 8px rgba(255, 59, 59, 0.5); }
+
+/* ============ Ruleta del castigo ============ */
+.ruleta-btn { margin-top: 1.2rem; }
+.ruleta-result {
+  margin-top: 0.8rem;
+  font-family: 'Righteous', cursive;
+  color: var(--gold);
+  min-height: 1.4em;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+.dicom-chip.spinning {
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(255, 215, 0, 0.7);
+  transform: scale(1.05);
+}
+.dicom-chip.winner {
+  border: 1.5px solid var(--gold);
+  background: rgba(255, 215, 0, 0.15);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  animation: winnerPulse 0.8s ease-in-out 2;
+}
+@keyframes winnerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ============ Compartir ============ */
+.panel-share { border-color: rgba(0, 240, 255, 0.3); }
+
+.share-card-maker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+.share-select {
+  flex: 1 1 200px;
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.6rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+}
+
+.share-canvas {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 14px;
+  margin-top: 1.2rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 24px rgba(255, 10, 60, 0.2);
+  display: block;
+}
+
+.share-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.share-web {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+  padding-top: 1.4rem;
+  border-top: 1px dashed var(--border);
+}
+.share-qr {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 6px;
+}
+.share-web-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
 
 /* ============ Galería ============ */
 .carousel {

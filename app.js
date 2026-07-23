@@ -193,11 +193,13 @@ function render(stats) {
   const morosos = sorted.filter((p) => p.debt > 0).sort((a, b) => b.debt - a.debt);
   $('dicom-list').innerHTML = morosos.length
     ? morosos.map((p) =>
-        `<span class="dicom-chip">${p.paidCount === 0 ? '👻' : '🐢'} ${esc(p.name)} · debe <span class="debt">${p.debt} cuota${p.debt === 1 ? '' : 's'} (${clp(p.debt * CUOTA)})</span>
+        `<span class="dicom-chip" data-name="${esc(p.name)}">${p.paidCount === 0 ? '👻' : '🐢'} ${esc(p.name)} · debe <span class="debt">${p.debt} cuota${p.debt === 1 ? '' : 's'} (${clp(p.debt * CUOTA)})</span>
           <button class="funar-btn" data-name="${esc(p.name)}" data-debt="${p.debt}" data-amount="${p.debt * CUOTA}" title="Copiar la funada pa' mandarle">📤</button>
         </span>`
       ).join('')
     : '<p class="dicom-empty">✨ ¡Nadie en DICOM! Todos al día, csm qué grandes cabros ✨</p>';
+
+  populateShareSelect(stats);
 }
 
 /* ====== Count-up ====== */
@@ -450,3 +452,194 @@ setInterval(renderCountdown, 3600000);
     });
   });
 })();
+
+/* ====== Compartí la vaca: web (QR + WhatsApp) ====== */
+const SITE_URL = 'https://pcornejov.github.io/despedida/';
+$('share-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&color=0a0304&bgcolor=ffffff&data=${encodeURIComponent(SITE_URL)}`;
+$('whatsapp-btn').href = `https://wa.me/?text=${encodeURIComponent('🎰 Mira cómo va la vaca de la despedida, csm: ' + SITE_URL)}`;
+
+if (navigator.share) {
+  $('native-share-web-btn').hidden = false;
+  $('native-share-web-btn').addEventListener('click', async () => {
+    try {
+      await navigator.share({ title: 'La Despedida', text: '¿Ya pagaste tu cuota, csm? 👀', url: SITE_URL });
+    } catch {}
+  });
+}
+
+/* ====== Compartí la vaca: tarjeta personal (canvas) ====== */
+function colorForName(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
+
+function populateShareSelect(stats) {
+  const sel = $('share-select');
+  const current = sel.value;
+  const names = [...stats.people].sort((a, b) => a.name.localeCompare(b.name));
+  sel.innerHTML = names.map((p) => `<option value="${esc(p.name)}">${esc(p.name)}</option>`).join('');
+  if (names.some((p) => p.name === current)) sel.value = current;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (w <= 0 || h <= 0) return;
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+async function generateShareCard(name) {
+  if (!lastStats) return;
+  const person = lastStats.people.find((p) => p.name === name);
+  if (!person) return;
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+
+  const canvas = $('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.textAlign = 'center';
+
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#1c060b');
+  bg.addColorStop(1, '#0a0304');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  const glow = ctx.createRadialGradient(W * 0.85, H * 0.12, 0, W * 0.85, H * 0.12, W * 0.55);
+  glow.addColorStop(0, 'rgba(255,10,60,0.35)');
+  glow.addColorStop(1, 'rgba(255,10,60,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.strokeStyle = 'rgba(255,47,160,0.5)';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(2, 2, W - 4, H - 4);
+
+  const personColor = colorForName(person.name);
+
+  ctx.shadowColor = '#FF2FA0';
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = '#FF2FA0';
+  ctx.font = "26px 'Righteous', sans-serif";
+  ctx.fillText('🎩 LA DESPEDIDA 🎩', W / 2, 75);
+
+  ctx.shadowColor = '#FF0A3C';
+  ctx.shadowBlur = 28;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = "84px 'Monoton', cursive";
+  ctx.fillText(person.name.toUpperCase(), W / 2, 195);
+  ctx.shadowBlur = 0;
+
+  const badgeTxt = badgeFor(person, lastStats) || STATUS_LABEL[person.status];
+  ctx.fillStyle = '#FFD700';
+  ctx.font = "26px 'Righteous', sans-serif";
+  ctx.fillText(badgeTxt, W / 2, 245);
+
+  const barX = W * 0.15, barY = 290, barW = W * 0.7, barH = 28;
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  roundRect(ctx, barX, barY, barW, barH, 14);
+  ctx.fill();
+  const pctPerson = lastStats.months.length ? person.paidCount / lastStats.months.length : 0;
+  const fillColor = person.status === 'full' ? '#FFD700' : person.status === 'aldia' ? '#39FF14' : person.status === 'atrasado' ? '#FFC53B' : '#FF3B3B';
+  ctx.fillStyle = fillColor;
+  ctx.shadowColor = fillColor;
+  ctx.shadowBlur = 16;
+  roundRect(ctx, barX, barY, barW * pctPerson, barH, 14);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = '#F5E7E9';
+  ctx.font = "26px 'Inter', sans-serif";
+  ctx.fillText(`${person.paidCount}/${lastStats.months.length} cuotas · ${clp(person.paidCount * CUOTA)}`, W / 2, 358);
+
+  ctx.beginPath();
+  ctx.arc(W / 2, 420, 34, 0, Math.PI * 2);
+  ctx.fillStyle = personColor;
+  ctx.fill();
+  ctx.font = "bold 28px 'Inter', sans-serif";
+  ctx.fillStyle = '#0a0304';
+  ctx.fillText(person.name.slice(0, 2).toUpperCase(), W / 2, 430);
+
+  ctx.font = "20px 'Inter', sans-serif";
+  ctx.fillStyle = '#c98d9a';
+  ctx.fillText('🎰 pcornejov.github.io/despedida', W / 2, H - 30);
+
+  canvas.hidden = false;
+  $('share-card-actions').hidden = false;
+}
+
+$('share-generate-btn').addEventListener('click', () => {
+  const name = $('share-select').value;
+  if (name) generateShareCard(name);
+});
+
+$('share-download-btn').addEventListener('click', () => {
+  const canvas = $('share-canvas');
+  const name = ($('share-select').value || 'despedida').toLowerCase().replace(/\s+/g, '-');
+  const link = document.createElement('a');
+  link.download = `despedida-${name}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+
+if (navigator.share) {
+  $('share-native-btn').hidden = false;
+  $('share-native-btn').addEventListener('click', () => {
+    const canvas = $('share-canvas');
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = new File([blob], 'despedida.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: 'La Despedida', text: '¿Cómo voy con la vaca? 👀' });
+        } catch {}
+      }
+    });
+  });
+}
+
+/* ====== Easter egg: click al título ====== */
+document.querySelector('.neon-title').addEventListener('click', () => {
+  playCoinSound();
+  fireConfetti(80, 3000);
+});
+
+/* ====== Ruleta del castigo ====== */
+$('ruleta-btn').addEventListener('click', () => {
+  if (!lastStats) return;
+  const morosos = lastStats.people.filter((p) => p.debt > 0);
+  const resultEl = $('ruleta-result');
+  if (!morosos.length) {
+    resultEl.textContent = '✨ No hay a quién culpar, todos al día';
+    return;
+  }
+  const chips = [...document.querySelectorAll('.dicom-chip')];
+  if (!chips.length) return;
+  chips.forEach((c) => c.classList.remove('winner'));
+  resultEl.textContent = '';
+  playCoinSound();
+  let i = 0;
+  let speed = 45;
+  (function spin() {
+    chips.forEach((c) => c.classList.remove('spinning'));
+    chips[i % chips.length].classList.add('spinning');
+    i++;
+    speed += 35;
+    if (speed < 420) {
+      setTimeout(spin, speed);
+    } else {
+      chips.forEach((c) => c.classList.remove('spinning'));
+      const winner = morosos[Math.floor(Math.random() * morosos.length)];
+      const winnerChip = chips.find((c) => c.dataset.name === winner.name);
+      if (winnerChip) winnerChip.classList.add('winner');
+      fireConfetti(50, 2000);
+      resultEl.textContent = `🎯 ¡${winner.name} paga primero la otra ronda, csm!`;
+    }
+  })();
+});

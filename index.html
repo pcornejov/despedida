@@ -6,6 +6,12 @@
   <title>La Despedida 🎰 ¿Quién ha pagado?</title>
   <meta name="description" content="El fondo de la despedida de soltero: quién ha pagado, quién está en DICOM y los datos pa' transferir.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎰</text></svg>">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0304">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="La Despedida">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Righteous&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -91,6 +97,32 @@
         <h3 class="dicom-title">🚨 DICOM de la Despedida 🚨</h3>
         <p class="panel-sub">El que no paga no chupa, csm 🍺❌</p>
         <div id="dicom-list" class="dicom-list"></div>
+        <button id="ruleta-btn" class="btn-neon ruleta-btn">🎡 Ruleta del castigo</button>
+        <p id="ruleta-result" class="ruleta-result"></p>
+      </section>
+
+      <!-- Compartir -->
+      <section class="panel panel-share">
+        <h2 class="neon-cyan">📤 Compartí la vaca</h2>
+        <p class="panel-sub">Generá tu tarjeta y mandala pa'l grupo, o pasales el link a los cagados</p>
+
+        <div class="share-card-maker">
+          <select id="share-select" class="share-select"></select>
+          <button id="share-generate-btn" class="btn-neon">🎨 Generar mi tarjeta</button>
+        </div>
+        <canvas id="share-canvas" width="1000" height="560" class="share-canvas" hidden></canvas>
+        <div class="share-card-actions" id="share-card-actions" hidden>
+          <button id="share-download-btn" class="social-btn">⬇️ Descargar</button>
+          <button id="share-native-btn" class="social-btn" hidden>📤 Compartir tarjeta</button>
+        </div>
+
+        <div class="share-web">
+          <img id="share-qr" class="share-qr" alt="Código QR de la web" width="140" height="140" loading="lazy">
+          <div class="share-web-buttons">
+            <a id="whatsapp-btn" class="social-btn" target="_blank" rel="noopener">📲 Compartir por WhatsApp</a>
+            <button id="native-share-web-btn" class="social-btn" hidden>📤 Compartir el link</button>
+          </div>
+        </div>
       </section>
 
       <!-- Galería del venue -->
@@ -139,5 +171,10 @@
   </footer>
 
   <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    }
+  </script>
 </body>
 </html>
